@@ -1,6 +1,5 @@
 #include "base_algo_let.h"
 #include <algorithm>
-
 std::vector<int> positive_numbers(const std::vector<int>& v)
 {
 	std::vector<int> result;
