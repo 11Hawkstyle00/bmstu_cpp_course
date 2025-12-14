@@ -16,14 +16,14 @@
 
 struct Student
 {
-	Student(const char* name_, int age_) : age(age_), name(name_) {}
-	/// operator ==
-	bool operator==(const Student& other) const
-	{
-		return other.age == age && other.name == name;
-	}
-	uint8_t age;
-	std::string name;
+    Student(const char* name_, int age_) : age(age_), name(name_) {}
+    /// operator ==
+    bool operator==(const Student& other) const
+    {
+        return other.age == age && other.name == name;
+    }
+    uint8_t age;
+    std::string name;
 };
 std::vector<int> positive_numbers(const std::vector<int>& v);
 void sort_positive_numbers(std::vector<int>& v);
