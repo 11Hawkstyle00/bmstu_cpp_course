@@ -1,7 +1,7 @@
 BasedOnStyle: Chromium
 ---
 Language: Cpp
-UseTab: Always
+UseTab: Never
 TabWidth: 4
 IndentWidth: 4
 BreakBeforeBraces: Allman
