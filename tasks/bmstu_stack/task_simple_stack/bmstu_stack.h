@@ -1,11 +1,11 @@
 #pragma once
 
-#include <exception>
-#include <utility>
-#include <stdexcept>
-#include <new>
 #include <cstddef>
+#include <exception>
 #include <iostream>
+#include <new>
+#include <stdexcept>
+#include <utility>
 
 namespace bmstu
 {
@@ -22,7 +22,8 @@ class stack
         size_t new_capacity = capacity_ * 2u;
         T* new_data = static_cast<T*>(::operator new(new_capacity * sizeof(T)));
 
-        for (size_t i = 0; i < size_; ++i) {
+        for (size_t i = 0; i < size_; ++i)
+        {
             new (&new_data[i]) T(std::move(data_[i]));
             data_[i].~T();
         }
@@ -34,10 +35,13 @@ class stack
 
     void ensure_capacity()
     {
-        if (capacity_ == 0u) {
+        if (capacity_ == 0u)
+        {
             capacity_ = 1u;
             data_ = static_cast<T*>(::operator new(capacity_ * sizeof(T)));
-        } else if (size_ >= capacity_) {
+        }
+        else if (size_ >= capacity_)
+        {
             resize();
         }
     }
@@ -58,7 +62,8 @@ class stack
 
     stack& operator=(stack&& other) noexcept
     {
-        if (this != &other) {
+        if (this != &other)
+        {
             clear();
             ::operator delete(data_);
             data_ = other.data_;
@@ -105,7 +110,8 @@ class stack
 
     void clear() noexcept
     {
-        for (size_t i = 0; i < size_; ++i) {
+        for (size_t i = 0; i < size_; ++i)
+        {
             data_[i].~T();
         }
         size_ = 0u;
@@ -113,7 +119,8 @@ class stack
 
     void pop()
     {
-        if (empty()) {
+        if (empty())
+        {
             throw std::underflow_error("Stack is empty");
         }
         --size_;
@@ -122,7 +129,8 @@ class stack
 
     T& top()
     {
-        if (empty()) {
+        if (empty())
+        {
             throw std::underflow_error("Stack is empty");
         }
         return data_[size_ - 1];
@@ -130,11 +138,12 @@ class stack
 
     const T& top() const
     {
-        if (empty()) {
+        if (empty())
+        {
             throw std::underflow_error("Stack is empty");
         }
         return data_[size_ - 1];
     }
 };
 
-} // namespace bmstu
+}  // namespace bmstu
