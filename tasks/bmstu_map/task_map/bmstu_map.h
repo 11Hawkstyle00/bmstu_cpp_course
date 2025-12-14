@@ -35,6 +35,7 @@
  * - Все 18 тестов должны пройти успешно после полной реализации
  */
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
@@ -42,7 +43,6 @@
 #include <stack>
 #include <stdexcept>
 #include <utility>
-#include <algorithm>
 #include "abstract_iterator.h"
 
 namespace bmstu
@@ -80,17 +80,11 @@ class avl_balanced_tree
 		root_ = insert(key, value, root_);
 	}
 
-	void remove(const K& key) 
-	{ 
-		root_ = remove(key, root_);
-	}
+	void remove(const K& key) { root_ = remove(key, root_); }
 
 	tree_node<K, V>* find(const K& key) { return find(key, root_); }
 
-	const tree_node<K, V>* find(const K& key) const
-	{
-		return find(key, root_);
-	}
+	const tree_node<K, V>* find(const K& key) const { return find(key, root_); }
 
 	bool contains(const K& key) const { return find(key) != nullptr; }
 
@@ -111,20 +105,24 @@ class avl_balanced_tree
 	}
 
    private:
-	tree_node<K, V>* insert(const K& key,
-							const V& value,
-							tree_node<K, V>* node)
+	tree_node<K, V>* insert(const K& key, const V& value, tree_node<K, V>* node)
 	{
-		if (node == nullptr) {
+		if (node == nullptr)
+		{
 			++size_;
 			return new tree_node<K, V>(key, value);
 		}
 
-		if (key < node->key) {
+		if (key < node->key)
+		{
 			node->left = insert(key, value, node->left);
-		} else if (key > node->key) {
+		}
+		else if (key > node->key)
+		{
 			node->right = insert(key, value, node->right);
-		} else {
+		}
+		else
+		{
 			node->value = value;
 			return node;
 		}
@@ -134,26 +132,38 @@ class avl_balanced_tree
 
 	tree_node<K, V>* remove(const K& key, tree_node<K, V>* node)
 	{
-		if (node == nullptr) {
+		if (node == nullptr)
+		{
 			return nullptr;
 		}
 
-		if (key < node->key) {
+		if (key < node->key)
+		{
 			node->left = remove(key, node->left);
-		} else if (key > node->key) {
+		}
+		else if (key > node->key)
+		{
 			node->right = remove(key, node->right);
-		} else {
-			if (node->left == nullptr || node->right == nullptr) {
+		}
+		else
+		{
+			if (node->left == nullptr || node->right == nullptr)
+			{
 				tree_node<K, V>* temp = node->left ? node->left : node->right;
-				if (temp == nullptr) {
+				if (temp == nullptr)
+				{
 					temp = node;
 					node = nullptr;
-				} else {
+				}
+				else
+				{
 					*node = *temp;
 				}
 				delete temp;
 				--size_;
-			} else {
+			}
+			else
+			{
 				tree_node<K, V>* temp = findMinPtr(node->right);
 				node->key = temp->key;
 				node->value = temp->value;
@@ -161,7 +171,8 @@ class avl_balanced_tree
 			}
 		}
 
-		if (node == nullptr) {
+		if (node == nullptr)
+		{
 			return nullptr;
 		}
 
@@ -170,22 +181,29 @@ class avl_balanced_tree
 
 	tree_node<K, V>* find(const K& key, tree_node<K, V>* node) const
 	{
-		if (node == nullptr) {
+		if (node == nullptr)
+		{
 			return nullptr;
 		}
 
-		if (key < node->key) {
+		if (key < node->key)
+		{
 			return find(key, node->left);
-		} else if (key > node->key) {
+		}
+		else if (key > node->key)
+		{
 			return find(key, node->right);
-		} else {
+		}
+		else
+		{
 			return node;
 		}
 	}
 
 	tree_node<K, V>* findMinPtr(tree_node<K, V>* node)
 	{
-		while (node != nullptr && node->left != nullptr) {
+		while (node != nullptr && node->left != nullptr)
+		{
 			node = node->left;
 		}
 		return node;
@@ -201,8 +219,10 @@ class avl_balanced_tree
 		tree_node<K, V>* k1 = k2->left;
 		k2->left = k1->right;
 		k1->right = k2;
-		k2->height = 1 + std::max(heightOfTree(k2->left), heightOfTree(k2->right));
-		k1->height = 1 + std::max(heightOfTree(k1->left), heightOfTree(k1->right));
+		k2->height =
+			1 + std::max(heightOfTree(k2->left), heightOfTree(k2->right));
+		k1->height =
+			1 + std::max(heightOfTree(k1->left), heightOfTree(k1->right));
 		k2 = k1;
 	}
 
@@ -211,8 +231,10 @@ class avl_balanced_tree
 		tree_node<K, V>* k2 = k1->right;
 		k1->right = k2->left;
 		k2->left = k1;
-		k1->height = 1 + std::max(heightOfTree(k1->left), heightOfTree(k1->right));
-		k2->height = 1 + std::max(heightOfTree(k2->left), heightOfTree(k2->right));
+		k1->height =
+			1 + std::max(heightOfTree(k1->left), heightOfTree(k1->right));
+		k2->height =
+			1 + std::max(heightOfTree(k2->left), heightOfTree(k2->right));
 		k1 = k2;
 	}
 
@@ -230,7 +252,8 @@ class avl_balanced_tree
 
 	tree_node<K, V>* balance(tree_node<K, V>* t)
 	{
-		if (t == nullptr) {
+		if (t == nullptr)
+		{
 			return t;
 		}
 
@@ -238,16 +261,25 @@ class avl_balanced_tree
 
 		int balance_factor = heightOfTree(t->left) - heightOfTree(t->right);
 
-		if (balance_factor > 1) {
-			if (heightOfTree(t->left->left) >= heightOfTree(t->left->right)) {
+		if (balance_factor > 1)
+		{
+			if (heightOfTree(t->left->left) >= heightOfTree(t->left->right))
+			{
 				rotateWithLeftChild(t);
-			} else {
+			}
+			else
+			{
 				doubleWithLeftChild(t);
 			}
-		} else if (balance_factor < -1) {
-			if (heightOfTree(t->right->right) >= heightOfTree(t->right->left)) {
+		}
+		else if (balance_factor < -1)
+		{
+			if (heightOfTree(t->right->right) >= heightOfTree(t->right->left))
+			{
 				rotateWithRightChild(t);
-			} else {
+			}
+			else
+			{
 				doubleWithRightChild(t);
 			}
 		}
@@ -326,17 +358,21 @@ class map
 		explicit iterator(tree_node<K, V>* root, bool is_end = false)
 			: current_(nullptr)
 		{
-			if (root == nullptr) {
+			if (root == nullptr)
+			{
 				return;
 			}
 
-			if (!is_end) {
+			if (!is_end)
+			{
 				tree_node<K, V>* node = root;
-				while (node != nullptr) {
+				while (node != nullptr)
+				{
 					stack_.push(node);
 					node = node->left;
 				}
-				if (!stack_.empty()) {
+				if (!stack_.empty())
+				{
 					current_ = stack_.top();
 					stack_.pop();
 				}
@@ -355,21 +391,27 @@ class map
 
 		iterator& operator++() override
 		{
-			if (current_ == nullptr) {
+			if (current_ == nullptr)
+			{
 				return *this;
 			}
 
-			if (current_->right != nullptr) {
+			if (current_->right != nullptr)
+			{
 				tree_node<K, V>* node = current_->right;
-				while (node != nullptr) {
+				while (node != nullptr)
+				{
 					stack_.push(node);
 					node = node->left;
 				}
 			}
 
-			if (stack_.empty()) {
+			if (stack_.empty())
+			{
 				current_ = nullptr;
-			} else {
+			}
+			else
+			{
 				current_ = stack_.top();
 				stack_.pop();
 			}
@@ -384,15 +426,9 @@ class map
 			return temp;
 		}
 
-		iterator& operator--() override
-		{
-			return *this;
-		}
+		iterator& operator--() override { return *this; }
 
-		iterator operator--(int) override
-		{
-			return *this;
-		}
+		iterator operator--(int) override { return *this; }
 
 		iterator& operator+=(
 			const typename iterator::difference_type& n) override
@@ -520,4 +556,4 @@ class map
    private:
 	avl_balanced_tree<K, V> tree_;
 };
-} // namespace bmstu
+}  // namespace bmstu
