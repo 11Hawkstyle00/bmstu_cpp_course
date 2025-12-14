@@ -558,4 +558,4 @@ class map
 };
 }  // namespace bmstu
 
-// Map
+// Код отформатирован согласно .clang-format
