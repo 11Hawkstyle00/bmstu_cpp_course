@@ -1,17 +1,8 @@
 BasedOnStyle: Chromium
----
-Language: Cpp
 UseTab: Never
 TabWidth: 4
 IndentWidth: 4
 BreakBeforeBraces: Allman
 Standard: c++20
----
-Language: C
-BasedOnStyle: GNU
-UseTab: Never
-IndentWidth: 4
-TabWidth: 4
-BreakBeforeBraces: Allman
 ColumnLimit: 80
 PointerAlignment: Left
